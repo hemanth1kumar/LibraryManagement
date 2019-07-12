@@ -10,15 +10,14 @@ public class Main {
     DatabaseConnection databaseConnection;
     PreparedStatement preparedStatement;
     ResultSet resultSet;
+    Scanner scan = new Scanner(System.in);
 
     public void validateUser(int userId,String password,String type) {
         String query;
-        if(type.equals("admin")) {
+        if(type.equals("admin"))
             query = "select * from admin where userid="+userId+";";
-        }
         else
             query = "select * from librarian where userid="+userId+";";
-
         resultSet = databaseConnection.getData(query);
 
         if(resultSet == null) {
@@ -42,7 +41,6 @@ public class Main {
         }
     }
     public void login() {
-        Scanner scan = new Scanner(System.in);
         System.out.println("1: Admin Login /n2: Librarian Login");
         int type = scan.nextInt();
         System.out.print("UserID: ");
@@ -55,8 +53,41 @@ public class Main {
             validateUser(userid,password,"librarian");
     }
 
+    public void addLibrarian() {
+
+    }
+
+    public void viewLibrarian() {
+
+    }
+    public void removeLibrarian() {
+
+    }
+    public void logout() {
+
+    }
     public void displayAdminOptions() {
         System.out.println("Admin Options:");
+        System.out.print("1. ADD Librarian/n2. View Librarian/n3. Remove Librarian/n4. Logout");
+        int opt = scan.nextInt();
+        switch (opt) {
+            case 1: {
+                addLibrarian();
+                break;
+            }
+            case 2: {
+                viewLibrarian();
+                break;
+            }
+            case 3: {
+                removeLibrarian();
+                break;
+            }
+            case 4: {
+                logout();
+                break;
+            }
+        }
     }
     Main() {
         databaseConnection = new DatabaseConnection();
