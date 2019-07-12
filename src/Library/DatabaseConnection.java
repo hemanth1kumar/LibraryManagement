@@ -3,6 +3,7 @@ package Library;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.*;
+import java.util.concurrent.ExecutionException;
 
 public class DatabaseConnection {
     private String username = "root";
@@ -24,6 +25,7 @@ public class DatabaseConnection {
         }
     }
 
+    /*
     protected String createTable(String tableName) {
         String res = "";
         int flag = -1;
@@ -41,12 +43,32 @@ public class DatabaseConnection {
                 res = "Table Already Exists";
             }
             else {
-                query = "create table " + tableName + "";
+                query = "create table " + tableName + "(userid varchar(500) ,password varchar(200),contact varchar(500))";
             }
         }
         catch (Exception e) {
             res = e.toString();
         }
         return res;
+    }
+     */
+
+    protected void executeQuery(String Query) {         //for insert, update, drop queries
+        try {
+            preparedStatement.executeUpdate(Query);
+        }
+        catch (Exception e) {
+            System.out.println("unable to process query"+e);
+        }
+    }
+    protected ResultSet getData(String Query) {         // To get data from database
+        try {
+            preparedStatement = connection.prepareStatement(Query);
+            resultSet = preparedStatement.executeQuery(Query);
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+        return resultSet;
     }
 }
