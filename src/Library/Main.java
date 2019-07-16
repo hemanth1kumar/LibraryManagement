@@ -6,13 +6,13 @@ import java.util.Scanner;
 
 public class Main {
     Admin admin;
-    Librarian librarian;
+    //Librarian librarian;
     DatabaseConnection databaseConnection;
     PreparedStatement preparedStatement;
     ResultSet resultSet;
     Scanner scan = new Scanner(System.in);
 
-    public void validateUser(int userId,String password,String type) {
+    public boolean validateUser(int userId,String password,String type) {
         String query;
         if(type.equals("admin"))
             query = "select * from admin where userid="+userId+";";
@@ -30,7 +30,7 @@ public class Main {
                     String Password = resultSet.getString("password");
                     if (Password.equals(password)) {
                         System.out.println("Login Successful");
-                        displayAdminOptions();
+                        return true;
                     }
                 }
             }
@@ -39,40 +39,46 @@ public class Main {
             }
 
         }
+        return false;
     }
+
     public void login() {
-        System.out.println("1: Admin Login /n2: Librarian Login");
+        System.out.println("1: Admin Login, 2: Librarian Login");
         int type = scan.nextInt();
         System.out.print("UserID: ");
         int userid = Integer.parseInt(scan.next());
         System.out.print("Password: ");
         String password = scan.next();
-        if(type == 1)
-            validateUser(userid,password,"admin");
+        if(type == 1) {
+            if(validateUser(userid, password, "admin")) {
+                admin = new Admin();
+                displayAdminOptions();
+            }
+            else {
+                System.out.println("Invalid Credentials !!");
+            }
+        }
         else
-            validateUser(userid,password,"librarian");
+            if(validateUser(userid,password,"librarian")) {
+
+            }
     }
 
-    public void addLibrarian() {
-
-    }
 
     public void viewLibrarian() {
 
     }
-    public void removeLibrarian() {
 
-    }
     public void logout() {
 
     }
     public void displayAdminOptions() {
         System.out.println("Admin Options:");
-        System.out.print("1. ADD Librarian/n2. View Librarian/n3. Remove Librarian/n4. Logout");
+        System.out.println("1. ADD Librarian/n2. View Librarian/n3. Remove Librarian/n4. Logout");
         int opt = scan.nextInt();
         switch (opt) {
             case 1: {
-                addLibrarian();
+                admin.addLibrarian();
                 break;
             }
             case 2: {
@@ -80,7 +86,7 @@ public class Main {
                 break;
             }
             case 3: {
-                removeLibrarian();
+                admin.removeLibrarian();
                 break;
             }
             case 4: {
